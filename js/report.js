@@ -24,11 +24,26 @@ document.getElementById("teacherInfo").innerHTML =
 
 
 // ===============================
-// 2) إعداد رابط Google Sheet
+// 2) إعداد Firebase
 // ===============================
 
-const SHEET_ID = "1OxjO_Kl8djn5UdOeDI3EWfFWcvrAWoJri56Fkz0sYck";
-const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+var firebaseConfig = {
+  apiKey: "AIzaSyD-xxxxxxxxxxxxxxxxxxxx",
+  authDomain: "quiz-262a8.firebaseapp.com",
+  databaseURL: "https://quiz-262a8-default-rtdb.firebaseio.com",
+  projectId: "quiz-262a8",
+  storageBucket: "quiz-262a8.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:xxxxxxxxxxxx"
+};
+
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
+
+
+// ===============================
+// 3) تحميل النتائج من Firebase
+// ===============================
 
 let allResults = [];
 let allMaterials = new Set();
@@ -36,37 +51,29 @@ let allStudents = new Set();
 let allAttempts = new Set();
 let allSkills = new Set();
 
+async function loadResultsFromFirebase() {
+    return new Promise(resolve => {
+        db.ref("results").once("value", snapshot => {
+            let results = [];
 
-// ===============================
-// 3) تحميل النتائج من Google Sheets
-// ===============================
+            snapshot.forEach(child => {
+                const data = child.val();
+                results.push({
+                    id: data.id,
+                    name: data.name,
+                    material: data.material,
+                    attempt: data.attempt,
+                    score: data.score,
+                    total: data.total,
+                    percent: data.percent,
+                    date: data.date,
+                    skills: data.skills || {}
+                });
+            });
 
-async function loadResultsFromSheet() {
-    try {
-        const response = await fetch(SHEET_URL);
-        const text = await response.text();
-
-        const json = JSON.parse(text.substring(47, text.length - 2));
-        const rows = json.table.rows;
-
-        const results = rows.map(row => ({
-            id: row.c[0]?.v || "",
-            name: row.c[1]?.v || "",
-            material: row.c[2]?.v || "",
-            attempt: row.c[3]?.v || "",
-            score: row.c[4]?.v || 0,
-            total: row.c[5]?.v || 0,
-            percent: row.c[6]?.v || 0,
-            date: row.c[7]?.v || "",
-            skills: JSON.parse(row.c[8]?.v || "{}")
-        }));
-
-        return results;
-
-    } catch (error) {
-        console.error("خطأ أثناء تحميل البيانات:", error);
-        return [];
-    }
+            resolve(results);
+        });
+    });
 }
 
 
@@ -159,7 +166,7 @@ function renderTable(results) {
             <td>${r.attempt}</td>
             <td>${r.score} / ${r.total}</td>
             <td>${r.percent}%</td>
-            <td>${new Date(r.date).toLocaleString("ar-SA")}</td>
+            <td>${r.date}</td>
         `;
 
         Array.from(allSkills).forEach(skill => {
@@ -200,7 +207,7 @@ function goHome() {
 // ===============================
 
 async function initReport() {
-    allResults = await loadResultsFromSheet();
+    allResults = await loadResultsFromFirebase();
 
     // تجميع القيم للفلاتر
     allResults.forEach(r => {
