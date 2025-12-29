@@ -1,6 +1,7 @@
 // js/student.js
 // إعداد Firebase
-const firebaseConfig = {
+// إعداد Firebase
+var firebaseConfig = {
   apiKey: "AIzaSyD-xxxxxxxxxxxxxxxxxxxx",
   authDomain: "quiz-262a8.firebaseapp.com",
   databaseURL: "https://quiz-262a8-default-rtdb.firebaseio.com",
@@ -10,8 +11,9 @@ const firebaseConfig = {
   appId: "1:123456789:web:xxxxxxxxxxxx"
 };
 
-const app = firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
+
 
 console.log("المادة المخزنة:", sessionStorage.getItem("material"));
 const sessionDataFromStorage = JSON.parse(sessionStorage.getItem("currentSession"));
@@ -282,5 +284,6 @@ function goToNextSection() {
     sessionStorage.setItem("currentSession", JSON.stringify(sessionData));
     window.location.href = "student.html";
 }
+
 
 
