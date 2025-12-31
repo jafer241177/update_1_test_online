@@ -382,9 +382,11 @@ function goToNextSection() {
     else if (currentMaterial === "لفظي") {
         sessionData.material = "كمي";
     }
+sessionStorage.setItem("material", sessionData.material);
 
     sessionStorage.setItem("currentSession", JSON.stringify(sessionData));
     window.location.href = "student.html";
 }
+
 
 
