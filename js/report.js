@@ -31,7 +31,7 @@ document.getElementById("teacherInfo").innerHTML =
 var firebaseConfig = {
   apiKey: "AIzaSyD-xxxxxxxxxxxxxxxxxxxx",
   authDomain: "quiz-262a8.firebaseapp.com",
-  databaseURL: "https://quiz-262a8-default-rtdb.firebaseio.com",
+  databaseURL: "https://quiz26-caf2f-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "quiz-262a8",
   storageBucket: "quiz-262a8.appspot.com",
   messagingSenderId: "123456789",
@@ -240,5 +240,6 @@ function exportToExcel() {
     // حفظ الملف
     XLSX.writeFile(workbook, "تقرير_الطلاب.xlsx");
 }
+
 
 
