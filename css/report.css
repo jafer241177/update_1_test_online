@@ -11,12 +11,12 @@ body {
 
 .container {
     background: white;
-    padding: 20px;
+    padding: 25px;
     border-radius: 12px;
     width: 95%;
     max-width: 1100px;
     margin: auto;
-    box-shadow: 0 0 10px #ccc;
+    box-shadow: 0 0 12px rgba(0,0,0,0.1);
 }
 
 
@@ -27,12 +27,12 @@ body {
 .logo-box {
     display: flex;
     justify-content: center;
-    gap: 20px;
-    margin-bottom: 15px;
+    gap: 25px;
+    margin-bottom: 20px;
 }
 
 .logo-box img {
-    width: 100px;
+    width: 110px;
 }
 
 
@@ -41,20 +41,21 @@ body {
 ================================ */
 
 .admin-menu {
-    margin: 20px 0;
+    margin: 25px 0;
     display: flex;
     justify-content: center;
     gap: 15px;
 }
 
 .admin-menu button {
-    padding: 10px 18px;
+    padding: 12px 20px;
     font-size: 16px;
     border: none;
     background: #007bff;
     color: white;
     border-radius: 8px;
     cursor: pointer;
+    transition: 0.2s;
 }
 
 .admin-menu button:hover {
@@ -67,16 +68,16 @@ body {
 ================================ */
 
 .filters {
-    margin: 20px 0;
+    margin: 25px 0;
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
     flex-wrap: wrap;
 }
 
 .filters select,
 .filters button {
-    padding: 10px;
+    padding: 12px;
     font-size: 16px;
     border-radius: 6px;
 }
@@ -97,25 +98,34 @@ body {
    جدول التقارير
 ================================ */
 
-table {
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 25px;
+}
+
+.report-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    min-width: 900px;
     font-size: 15px;
 }
 
-th, td {
-    border: 1px solid #ccc;
-    padding: 10px;
+.report-table th,
+.report-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
     text-align: center;
+    white-space: nowrap;
 }
 
-th {
-    background: #ddd;
-    font-weight: bold;
+.report-table th {
+    background: #007bff;
+    color: white;
+    font-size: 16px;
 }
 
-tr:nth-child(even) {
+.report-table tr:nth-child(even) {
     background: #f9f9f9;
 }
 
@@ -125,92 +135,26 @@ tr:nth-child(even) {
 ================================ */
 
 #printBtn {
-    padding: 10px 20px;
-    background: #444;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 20px;
-}
-
-#printBtn:hover {
-    background: #222;
-}
-
-
-/* ===============================
-   وضع الطباعة
-================================ */
-
-@media print {
-
-    body {
-        background: white;
-    }
-
-    .admin-menu,
-    .filters,
-    #printBtn,
-    .logo-box {
-        display: none !important;
-    }
-
-    .container {
-        box-shadow: none;
-        width: 100%;
-        margin: 0;
-        padding: 0;
-    }
-
-    table {
-        font-size: 14px;
-    }
-}
-/* زر الطباعة */
-#printBtn {
     background: #28a745;
     color: white;
-    padding: 12px 20px;
+    padding: 14px 20px;
     border: none;
     border-radius: 6px;
-    font-size: 16px;
+    font-size: 17px;
     cursor: pointer;
     width: 100%;
+    margin-top: 25px;
 }
 
 #printBtn:hover {
     background: #1e7e34;
 }
 
-/* منع تمدد الجدول */
-.table-container {
-    width: 100%;
-    overflow-x: auto;
-    margin-top: 20px;
-}
 
-/* تنسيق الجدول */
-.report-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 800px;
-}
+/* ===============================
+   للجوال
+================================ */
 
-.report-table th,
-.report-table td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: center;
-    white-space: nowrap;
-}
-
-.report-table th {
-    background: #007bff;
-    color: white;
-}
-
-/* للجوال */
 @media (max-width: 600px) {
     #printBtn {
         font-size: 15px;
@@ -224,20 +168,51 @@ tr:nth-child(even) {
     }
 }
 
-/* عند الطباعة */
+
+/* ===============================
+   وضع الطباعة
+================================ */
+
 @media print {
-    #printBtn,
-    .admin-menu,
-    .filters,
-    .logo-box {
-        display: none;
-    }
 
     body {
         background: white;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* إخفاء عناصر التحكم فقط */
+    .admin-menu,
+    .filters,
+    #printBtn {
+        display: none !important;
     }
 
     .container {
-        box-shadow: none;
+        box-shadow: none !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .table-container {
+        overflow: visible !important;
+    }
+
+    .report-table {
+        width: 100% !important;
+        min-width: 100% !important;
+        font-size: 14px !important;
+        page-break-inside: avoid !important;
+    }
+
+    tr, td, th {
+        page-break-inside: avoid !important;
+    }
+
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
     }
 }
+

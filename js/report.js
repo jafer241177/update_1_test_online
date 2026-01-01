@@ -139,7 +139,9 @@ function renderTable(results) {
     document.getElementById("printBtn").style.display = "block";
 
     let html = `
+    
     <div class="table-container">
+    
     <table class="report-table">
     <tr>
         <th>رقم الهوية</th>
@@ -180,10 +182,128 @@ function renderTable(results) {
     html += `
     </table>
     </div>
+
+    <!-- مكان الرسم البياني -->
+    <div class="chart-container print-only">
+        <h3>الرسم البياني</h3>
+        <canvas id="dynamicChart" width="400" height="250"></canvas>
+    </div>
     `;
 
     document.getElementById("reportArea").innerHTML = html;
+
+    // ================================
+    //      كود الرسم البياني حسب الفلاتر
+    // ================================
+
+    // إزالة أي رسم سابق
+    if (window.dynamicChartInstance) {
+        window.dynamicChartInstance.destroy();
+    }
+
+    // 1) إذا كانت النتيجة لطالب واحد → رسم مهارات
+    if (results.length === 1) {
+        const r = results[0];
+        const skillNames = Object.keys(r.skills);
+        const skillPercents = skillNames.map(s => r.skills[s].percent);
+
+        if (skillNames.length > 0) {
+            window.dynamicChartInstance = new Chart(document.getElementById("dynamicChart"), {
+                type: "bar",
+                data: {
+                    labels: skillNames,
+                    datasets: [{
+                        label: "نسبة الإتقان",
+                        data: skillPercents,
+                        backgroundColor: "#007bff88",
+                        borderColor: "#0056b3",
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    scales: { y: { beginAtZero: true, max: 100 } }
+                }
+            });
+        }
+        return;
+    }
+
+    // تجهيز مجموعات الفلاتر
+    const uniqueMaterials = new Set(results.map(r => r.material));
+    const uniqueStudents = new Set(results.map(r => r.name));
+    const uniqueAttempts = new Set(results.map(r => r.attempt));
+
+    // 2) مادة واحدة + عدة طلاب → مقارنة الطلاب في المادة
+    if (uniqueMaterials.size === 1 && uniqueStudents.size > 1) {
+        const labels = results.map(r => r.name);
+        const data = results.map(r => r.percent);
+
+        window.dynamicChartInstance = new Chart(document.getElementById("dynamicChart"), {
+            type: "bar",
+            data: {
+                labels,
+                datasets: [{
+                    label: "نسبة الطلاب في المادة",
+                    data,
+                    backgroundColor: "#28a74588",
+                    borderColor: "#1e7e34",
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: { y: { beginAtZero: true, max: 100 } }
+            }
+        });
+        return;
+    }
+
+    // 3) محاولة واحدة + عدة طلاب → مقارنة نتائج الطلاب في المحاولة
+    if (uniqueAttempts.size === 1 && uniqueStudents.size > 1) {
+        const labels = results.map(r => r.name);
+        const data = results.map(r => r.percent);
+
+        window.dynamicChartInstance = new Chart(document.getElementById("dynamicChart"), {
+            type: "line",
+            data: {
+                labels,
+                datasets: [{
+                    label: "نتائج الطلاب في المحاولة",
+                    data,
+                    borderColor: "#ff9800",
+                    backgroundColor: "#ff980088",
+                    borderWidth: 2,
+                    fill: true
+                }]
+            },
+            options: {
+                scales: { y: { beginAtZero: true, max: 100 } }
+            }
+        });
+        return;
+    }
+
+    // 4) كل شيء → توزيع الدرجات
+    const labels = results.map((_, i) => "طالب " + (i + 1));
+    const data = results.map(r => r.percent);
+
+    window.dynamicChartInstance = new Chart(document.getElementById("dynamicChart"), {
+        type: "bar",
+        data: {
+            labels,
+            datasets: [{
+                label: "توزيع الدرجات",
+                data,
+                backgroundColor: "#9c27b088",
+                borderColor: "#6a0080",
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: { y: { beginAtZero: true, max: 100 } }
+        }
+    });
 }
+
 
 
 // ===============================
@@ -240,6 +360,5 @@ function exportToExcel() {
     // حفظ الملف
     XLSX.writeFile(workbook, "تقرير_الطلاب.xlsx");
 }
-
 
 

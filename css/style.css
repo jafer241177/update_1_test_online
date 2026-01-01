@@ -180,3 +180,135 @@ select, input, button {
     max-width: 100%;
     height: auto;
 }
+/* ============================
+   تحسينات عامة للصفحة
+============================ */
+.container {
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+}
+
+h2 {
+    font-size: 26px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* ============================
+   منطقة السؤال
+============================ */
+#quizArea {
+    margin-top: 20px;
+}
+
+.question-box {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    font-size: 22px;
+    line-height: 1.8;
+    color: #222;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* ============================
+   تنسيق الخيارات (نسخة موحدة)
+============================ */
+.option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    margin: 12px 0;
+    background: #f8f9fa;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 19px;
+    transition: 0.2s;
+    border: 1px solid #e0e0e0;
+}
+
+.option:hover {
+    background: #e9f2ff;
+    border-color: #bcd7ff;
+}
+
+/* الراديو */
+.option input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border: 2px solid #555;
+    border-radius: 50%;
+    position: relative;
+    cursor: pointer;
+}
+
+.option input[type="radio"]:checked::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    background: #007bff;
+    border-radius: 50%;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+}
+
+/* ============================
+   الأزرار
+============================ */
+button {
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #005fcc;
+}
+
+/* زر إنهاء */
+#retryBtn {
+    background: #d9534f;
+}
+
+#retryBtn:hover {
+    background: #c9302c;
+}
+
+/* زر القسم التالي */
+#nextSectionBtn {
+    background: #28a745;
+}
+
+#nextSectionBtn:hover {
+    background: #1e7e34;
+}
+
+/* ============================
+   شريط الوقت
+============================ */
+#timeBarContainer {
+    height: 18px;
+}
+
+#timeBar {
+    border-radius: 12px;
+}
+
+/* ============================
+   تحسين الصور داخل السؤال
+============================ */
+.question-box img {
+    max-width: 95%;
+    border-radius: 12px;
+    margin-top: 12px;
+}
