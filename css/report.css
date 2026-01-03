@@ -170,6 +170,22 @@ body {
 
 
 /* ===============================
+   الهيدر (اسم المدرسة + العنوان)
+================================ */
+
+.report-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.school-name {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 10px 0 5px 0;
+}
+
+
+/* ===============================
    وضع الطباعة
 ================================ */
 
@@ -181,18 +197,39 @@ body {
         padding: 0 !important;
     }
 
-    /* إخفاء عناصر التحكم فقط */
+    /* إخفاء عناصر التحكم */
     .admin-menu,
     .filters,
-    #printBtn {
+    #printBtn,
+    #excelBtn {
         display: none !important;
     }
 
+    /* السماح للصفحة بالانقسام بشكل طبيعي */
     .container {
         box-shadow: none !important;
         width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
+        page-break-inside: auto !important;
+    }
+
+    /* منع فصل الهيدر عن التقرير */
+    .report-header {
+        page-break-after: avoid !important;
+        margin-bottom: 10px !important;
+    }
+
+    #teacherInfo {
+        page-break-after: avoid !important;
+        margin-bottom: 10px !important;
+    }
+
+    /* منع الصفحة البيضاء */
+    #reportArea {
+        page-break-before: avoid !important;
+        margin-top: 0 !important;
+        padding-top: 0 !important;
     }
 
     .table-container {
@@ -203,7 +240,6 @@ body {
         width: 100% !important;
         min-width: 100% !important;
         font-size: 14px !important;
-        page-break-inside: avoid !important;
     }
 
     tr, td, th {
