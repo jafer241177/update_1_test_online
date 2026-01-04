@@ -312,3 +312,29 @@ button:hover {
     border-radius: 12px;
     margin-top: 12px;
 }
+.question-boxes {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 15px 0;
+    flex-wrap: wrap;
+}
+
+.question-box-item {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: #e0e0e0;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.question-box-item.active {
+    background: #007bff;
+    color: white;
+    transform: scale(1.1);
+}
