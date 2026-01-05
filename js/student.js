@@ -1,6 +1,5 @@
 // js/student.js
 // إعداد Firebase
-// إعداد Firebase
 var firebaseConfig = {
   apiKey: "AIzaSyD-xxxxxxxxxxxxxxxxxxxx",
   authDomain: "quiz-262a8.firebaseapp.com",
@@ -14,11 +13,9 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 var db = firebase.database();
 
-
 console.log("المادة المخزنة:", sessionStorage.getItem("material"));
 const sessionDataFromStorage = JSON.parse(sessionStorage.getItem("currentSession"));
 const material = sessionDataFromStorage ? sessionDataFromStorage.material : null;
-
 console.log("المادة المخزنة:", material);
 
 let data = [];
@@ -31,12 +28,98 @@ let studentId = "";
 let studentName = "";
 let selectedMaterial = "";
 let sectionTime = 25 * 60; // 25 دقيقة كبداية
-sectionTime = Number(sessionStorage.getItem("sectionTime") || sectionTime);
 
 // ⭐ استرجاع التقدم إذا كان موجودًا
 currentIndex = Number(sessionStorage.getItem("currentIndex") || 0);
 studentAnswers = JSON.parse(sessionStorage.getItem("studentAnswers") || "{}");
-sectionTime = Number(sessionStorage.getItem("sectionTime") || 25 * 60);
+sectionTime = Number(sessionStorage.getItem("sectionTime") || sectionTime);
+
+// لتجميع درجات المهارات
+let skillStats = {};
+
+// 1) استرجاع بيانات الجلسة
+const sessionDataRaw = sessionStorage.getItem("currentSession");
+if (!sessionDataRaw) {
+    alert("لا توجد جلسة نشطة، الرجاء الدخول من الصفحة الرئيسية.");
+    window.location.href = "index.html";
+} else {
+    const sessionData = JSON.parse(sessionDataRaw);
+    studentId = sessionData.id;
+    studentName = sessionData.name;
+    selectedMaterial = sessionData.material;
+
+    document.getElementById("studentInfo").innerHTML = `
+        <p><b>الطالب:</b> ${studentName} (${studentId})</p>
+        <p><b>المادة:</b> ${selectedMaterial}</p>
+    `;
+}
+
+// ⭐ فحص هل الطالب حل هذا الاختبار اليوم أم لا
+function checkAlreadySubmitted() {
+    const today = new Date().toISOString().split("T")[0];
+    const uniqueKey = `${studentId}_${selectedMaterial}_${today}`;
+
+    db.ref("results/" + uniqueKey).once("value")
+      .then(snapshot => {
+          if (snapshot.exists()) {
+              // الطالب حل هذا القسم اليوم مسبقًا
+              document.body.innerHTML = `
+                  <div style="text-align:center; margin-top:80px; font-size:24px;">
+                      <b>لقد قمت بحل اختبار هذه المادة اليوم</b><br><br>
+                      لا يمكنك إعادة المحاولة إلا غدًا.<br><br>
+                      إذا كنت تحتاج لمحاولة إضافية، تواصل مع المعلم.
+                  </div>
+              `;
+              return;
+          }
+
+          // لا توجد نتيجة اليوم → نبدأ تحميل الأسئلة
+          loadQuestionsAndStart();
+      })
+      .catch(err => {
+          console.error("خطأ في فحص نتيجة الطالب:", err);
+          alert("حدث خطأ في الاتصال بقاعدة البيانات، الرجاء المحاولة لاحقًا.");
+          window.location.href = "index.html";
+      });
+}
+
+// 2) تحميل الأسئلة وبدء الاختبار
+function loadQuestionsAndStart() {
+    fetch("data/questions.json")
+      .then(res => res.json())
+      .then(json => {
+          data = json;
+          const selected = data.find(m => m.name === selectedMaterial);
+
+          if (!selected) {
+              alert("لم يتم العثور على أسئلة لهذه المادة");
+              window.location.href = "index.html";
+              return;
+          }
+
+          currentQuestions = selected.questions;
+          total = currentQuestions.length;
+
+          currentQuestions.forEach(q => {
+              if (!skillStats[q.skill]) {
+                  skillStats[q.skill] = { correct: 0, total: 0 };
+              }
+              skillStats[q.skill].total++;
+          });
+
+          createQuestionBoxes();
+          startSectionTimer();
+          loadQuestion();
+
+      })
+      .catch(err => {
+          console.error("خطأ في تحميل questions.json", err);
+          alert("خطأ في تحميل الأسئلة");
+      });
+}
+
+// استدعاء البداية بعد التأكد من الجلسة
+checkAlreadySubmitted();
 
 function createQuestionBoxes() {
     let container = document.getElementById("questionBoxes");
@@ -55,9 +138,8 @@ function renderContent(value) {
     // لو القيمة فاضية أو undefined أو null
     if (value === null || value === undefined) return "";
 
-    // حوّل القيمة إلى نص دائمًا (عشان لو كانت رقم ما يطيح الكود)
+    // حوّل القيمة إلى نص دائمًا
     let v = String(value).trim();
-
     if (v === "") return "";
 
     // إذا كانت القيمة رابط صورة
@@ -93,63 +175,8 @@ function renderContent(value) {
     return `<p>${v}</p>`;
 }
 
-
-// مؤقت القسم (25 دقيقة)
-
+// مؤقت القسم
 let sectionTimer = null;
-
-// لتجميع درجات المهارات
-let skillStats = {};
-
-// 1) استرجاع بيانات الجلسة
-const sessionDataRaw = sessionStorage.getItem("currentSession");
-if (!sessionDataRaw) {
-    alert("لا توجد جلسة نشطة، الرجاء الدخول من الصفحة الرئيسية.");
-    window.location.href = "index.html";
-} else {
-    const sessionData = JSON.parse(sessionDataRaw);
-    studentId = sessionData.id;
-    studentName = sessionData.name;
-    selectedMaterial = sessionData.material;
-
-    document.getElementById("studentInfo").innerHTML = `
-        <p><b>الطالب:</b> ${studentName} (${studentId})</p>
-        <p><b>المادة:</b> ${selectedMaterial}</p>
-    `;
-}
-
-// 2) تحميل الأسئلة
-fetch("data/questions.json")
-  .then(res => res.json())
-  .then(json => {
-      data = json;
-      const selected = data.find(m => m.name === selectedMaterial);
-
-      if (!selected) {
-          alert("لم يتم العثور على أسئلة لهذه المادة");
-          window.location.href = "index.html";
-          return;
-      }
-
-      currentQuestions = selected.questions;
-      total = currentQuestions.length;
-
-      currentQuestions.forEach(q => {
-          if (!skillStats[q.skill]) {
-              skillStats[q.skill] = { correct: 0, total: 0 };
-          }
-          skillStats[q.skill].total++;
-      });
-
-     startSectionTimer();
-createQuestionBoxes();   // ⭐ هنا بالضبط
-loadQuestion();
-
-  })
-  .catch(err => {
-      console.error("خطأ في تحميل questions.json", err);
-      alert("خطأ في تحميل الأسئلة");
-  });
 
 // 3) مؤقت القسم
 function startSectionTimer() {
@@ -157,7 +184,7 @@ function startSectionTimer() {
 
     sectionTimer = setInterval(() => {
         sectionTime--;
-sessionStorage.setItem("sectionTime", sectionTime);
+        sessionStorage.setItem("sectionTime", sectionTime);
 
         const minutes = Math.floor(sectionTime / 60);
         const seconds = sectionTime % 60;
@@ -192,17 +219,19 @@ sessionStorage.setItem("sectionTime", sectionTime);
 // 4) تحميل سؤال
 function loadQuestion() {
     const q = currentQuestions[currentIndex];
-// ⭐ تمييز السؤال النشط
-document.querySelectorAll(".question-box-item").forEach((box, index) => {
-    box.classList.toggle("active", index === currentIndex);
-});
+
+    // ⭐ تمييز السؤال النشط
+    document.querySelectorAll(".question-box-item").forEach((box, index) => {
+        box.classList.toggle("active", index === currentIndex);
+    });
 
     if (!q) {
         saveResult();
         showFinalResult();
         return;
     }
-document.getElementById("quizArea").style.display = "block";
+
+    document.getElementById("quizArea").style.display = "block";
 
     document.getElementById("quizArea").innerHTML = `
         <div class="question-box">
@@ -234,20 +263,18 @@ document.getElementById("quizArea").style.display = "block";
         </form>
 
         <div style="display:flex; gap:10px; margin-top:20px;">
-    <button class="next-btn" style="flex:1;" onclick="previousQuestion()">السابق</button>
-    <button class="next-btn" style="flex:1;" onclick="submitAnswer()">التالي</button>
-</div>
-
+            <button class="next-btn" style="flex:1;" onclick="previousQuestion()">السابق</button>
+            <button class="next-btn" style="flex:1;" onclick="submitAnswer()">التالي</button>
+        </div>
     `;
+
     // إعادة اختيار الإجابة السابقة إن وجدت
-if (studentAnswers[currentIndex] !== undefined) {
-    const prev = studentAnswers[currentIndex];
-    const radio = document.querySelector(`input[name="answer"][value="${prev}"]`);
-    if (radio) radio.checked = true;
+    if (studentAnswers[currentIndex] !== undefined) {
+        const prev = studentAnswers[currentIndex];
+        const radio = document.querySelector(`input[name="answer"][value="${prev}"]`);
+        if (radio) radio.checked = true;
+    }
 }
-
-}
-
 
 // زر السابق
 window.previousQuestion = function () {
@@ -257,12 +284,10 @@ window.previousQuestion = function () {
     }
 };
 
-
 // 5) التحقق من الإجابة
-
 window.submitAnswer = function () {
     const selected = document.querySelector('input[name="answer"]:checked');
-console.log("إجابات الطالب حتى الآن:", studentAnswers);
+    console.log("إجابات الطالب حتى الآن:", studentAnswers);
 
     if (!selected) {
         alert("الرجاء اختيار إجابة");
@@ -282,16 +307,15 @@ console.log("إجابات الطالب حتى الآن:", studentAnswers);
             skillStats[q.skill].correct++;
         }
     }
-// ⭐ حفظ التقدم
-sessionStorage.setItem("currentIndex", currentIndex);
-sessionStorage.setItem("studentAnswers", JSON.stringify(studentAnswers));
-sessionStorage.setItem("sectionTime", sectionTime);
+
+    // ⭐ حفظ التقدم
+    sessionStorage.setItem("currentIndex", currentIndex);
+    sessionStorage.setItem("studentAnswers", JSON.stringify(studentAnswers));
+    sessionStorage.setItem("sectionTime", sectionTime);
 
     currentIndex++;
     loadQuestion();
 };
-
-
 
 // 6) حفظ النتيجة (Firebase)
 function saveResult() {
@@ -365,10 +389,11 @@ function showFinalResult() {
             <p><b>${skillName}:</b> ${st.correct} من ${st.total} (${percent}%)</p>
         `;
     });
-// ⭐ مسح تقدم الطالب بعد إنهاء الاختبار
-sessionStorage.removeItem("currentIndex");
-sessionStorage.removeItem("studentAnswers");
-sessionStorage.removeItem("sectionTime");
+
+    // ⭐ مسح تقدم الطالب بعد إنهاء الاختبار
+    sessionStorage.removeItem("currentIndex");
+    sessionStorage.removeItem("studentAnswers");
+    sessionStorage.removeItem("sectionTime");
 
     document.getElementById("quizArea").innerHTML = `
         <h3>انتهى الاختبار</h3>
@@ -383,15 +408,19 @@ sessionStorage.removeItem("sectionTime");
     const retryBtn = document.getElementById("retryBtn");
     const nextBtn = document.getElementById("nextSectionBtn");
 
-    retryBtn.style.display = "inline-block";
-    retryBtn.onclick = () => forceExit();
+    if (retryBtn) {
+        retryBtn.style.display = "inline-block";
+        retryBtn.onclick = () => forceExit();
+    }
 
     const sectionDone = sessionStorage.getItem("sectionDone");
 
-    if (!sectionDone) {
-        nextBtn.style.display = "inline-block";
-    } else {
-        nextBtn.style.display = "none";
+    if (nextBtn) {
+        if (!sectionDone) {
+            nextBtn.style.display = "inline-block";
+        } else {
+            nextBtn.style.display = "none";
+        }
     }
 
     if (!sectionDone) {
@@ -418,13 +447,8 @@ function goToNextSection() {
     else if (currentMaterial === "لفظي") {
         sessionData.material = "كمي";
     }
-sessionStorage.setItem("material", sessionData.material);
 
+    sessionStorage.setItem("material", sessionData.material);
     sessionStorage.setItem("currentSession", JSON.stringify(sessionData));
     window.location.href = "student.html";
 }
-
-
-
-
-
