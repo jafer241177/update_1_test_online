@@ -4,10 +4,9 @@
 <meta charset="UTF-8">
 <title>تقارير الطلاب</title>
 <link rel="stylesheet" href="css/report.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
-
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -17,53 +16,60 @@
 
 <div class="container">
 
-    <div class="logo-box">
-        <img src="images/moe.png">
-        <img src="images/maaden.png">
+    <!-- الهيدر الرسمي -->
+    <div class="report-header">
+        <div class="logo-box">
+            <img src="images/moe.png">
+            <img src="images/maaden.png">
+        </div>
+
+        <h2 class="school-name">مدارس التميز العلمي بطريف</h2>
+        <h3>تقرير نتائج الطلاب</h3>
+
+        <hr>
     </div>
 
-    <h2>تقارير نتائج الطلاب</h2>
+    <!-- الفلاتر -->
     <div class="filters">
+        <select id="filterMaterial">
+            <option value="">اختر المادة</option>
+        </select>
 
-    <select id="filterMaterial">
-        <option value="">اختر المادة</option>
-    </select>
+        <select id="filterStudent">
+            <option value="">اختر الطالب</option>
+        </select>
 
-    <select id="filterStudent">
-        <option value="">اختر الطالب</option>
-    </select>
+        <select id="filterAttempt">
+            <option value="">كل المحاولات</option>
+        </select>
 
-    <select id="filterAttempt">
-        <option value="">كل المحاولات</option>
-    </select>
+        <button onclick="applyFilters()">عرض التقرير</button>
+    </div>
 
-    <button onclick="applyFilters()">عرض التقرير</button>
+    <!-- قائمة المعلم -->
+    <div class="admin-menu">
+        <button onclick="goToReports()">📊 عرض التقارير</button>
+        <button onclick="goToJson()">📥 رفع الأسماء والأسئلة</button>
+        <button onclick="goHome()">🏠 الصفحة الرئيسية</button>
+    </div>
 
-</div>
-
-<div class="admin-menu">
-    <button onclick="goToReports()">📊 عرض التقارير</button>
-    <button onclick="goToJson()">📥 رفع الأسماء والأسئلة</button>
-    <button onclick="goHome()">🏠 الصفحة الرئيسية</button>
-</div>
-
+    <!-- اسم المعلم -->
     <div id="teacherInfo"></div>
 
+    <!-- مكان ظهور الجدول -->
     <div id="reportArea"></div>
 
-<button id="printBtn" onclick="window.print()" style="display:none; margin-top:20px;">
-    طباعة التقرير
-</button>
-<button id="excelBtn" onclick="exportToExcel()" style="margin-top:20px;">
-    📥 تصدير إلى Excel
-</button>
+    <!-- أزرار الطباعة والتصدير -->
+    <button id="printBtn" onclick="window.print()" style="display:none; margin-top:20px;">
+        طباعة التقرير
+    </button>
 
+    <button id="excelBtn" onclick="exportToExcel()" style="margin-top:20px;">
+        📥 تصدير إلى Excel
+    </button>
 
 </div>
 
 <script src="js/report.js"></script>
 </body>
-
 </html>
-
-

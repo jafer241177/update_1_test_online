@@ -30,6 +30,27 @@ let studentAnswers = {};
 let studentId = "";
 let studentName = "";
 let selectedMaterial = "";
+let sectionTime = 25 * 60; // 25 دقيقة كبداية
+sectionTime = Number(sessionStorage.getItem("sectionTime") || sectionTime);
+
+// ⭐ استرجاع التقدم إذا كان موجودًا
+currentIndex = Number(sessionStorage.getItem("currentIndex") || 0);
+studentAnswers = JSON.parse(sessionStorage.getItem("studentAnswers") || "{}");
+sectionTime = Number(sessionStorage.getItem("sectionTime") || 25 * 60);
+
+function createQuestionBoxes() {
+    let container = document.getElementById("questionBoxes");
+    container.innerHTML = "";
+
+    for (let i = 0; i < currentQuestions.length; i++) {
+        container.innerHTML += `
+            <div class="question-box-item" id="qb-${i}">
+                ${i + 1}
+            </div>
+        `;
+    }
+}
+
 function renderContent(value) {
     // لو القيمة فاضية أو undefined أو null
     if (value === null || value === undefined) return "";
@@ -74,7 +95,7 @@ function renderContent(value) {
 
 
 // مؤقت القسم (25 دقيقة)
-let sectionTime = 25 * 60;
+
 let sectionTimer = null;
 
 // لتجميع درجات المهارات
@@ -120,8 +141,10 @@ fetch("data/questions.json")
           skillStats[q.skill].total++;
       });
 
-      startSectionTimer();
-      loadQuestion();
+     startSectionTimer();
+createQuestionBoxes();   // ⭐ هنا بالضبط
+loadQuestion();
+
   })
   .catch(err => {
       console.error("خطأ في تحميل questions.json", err);
@@ -134,6 +157,7 @@ function startSectionTimer() {
 
     sectionTimer = setInterval(() => {
         sectionTime--;
+sessionStorage.setItem("sectionTime", sectionTime);
 
         const minutes = Math.floor(sectionTime / 60);
         const seconds = sectionTime % 60;
@@ -168,6 +192,10 @@ function startSectionTimer() {
 // 4) تحميل سؤال
 function loadQuestion() {
     const q = currentQuestions[currentIndex];
+// ⭐ تمييز السؤال النشط
+document.querySelectorAll(".question-box-item").forEach((box, index) => {
+    box.classList.toggle("active", index === currentIndex);
+});
 
     if (!q) {
         saveResult();
@@ -254,6 +282,10 @@ console.log("إجابات الطالب حتى الآن:", studentAnswers);
             skillStats[q.skill].correct++;
         }
     }
+// ⭐ حفظ التقدم
+sessionStorage.setItem("currentIndex", currentIndex);
+sessionStorage.setItem("studentAnswers", JSON.stringify(studentAnswers));
+sessionStorage.setItem("sectionTime", sectionTime);
 
     currentIndex++;
     loadQuestion();
@@ -333,6 +365,10 @@ function showFinalResult() {
             <p><b>${skillName}:</b> ${st.correct} من ${st.total} (${percent}%)</p>
         `;
     });
+// ⭐ مسح تقدم الطالب بعد إنهاء الاختبار
+sessionStorage.removeItem("currentIndex");
+sessionStorage.removeItem("studentAnswers");
+sessionStorage.removeItem("sectionTime");
 
     document.getElementById("quizArea").innerHTML = `
         <h3>انتهى الاختبار</h3>
@@ -387,5 +423,8 @@ sessionStorage.setItem("material", sessionData.material);
     sessionStorage.setItem("currentSession", JSON.stringify(sessionData));
     window.location.href = "student.html";
 }
+
+
+
 
 
