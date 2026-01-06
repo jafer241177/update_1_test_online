@@ -206,5 +206,222 @@
                 "skill": "هندسة"
             }
         ]
+    },
+    {
+        "name": "STEP",
+        "questions": [
+            {
+                "q": "I haven't ____my car yet.",
+                "a": "paint",
+                "b": "paints ",
+                "c": "painted",
+                "d": "painting",
+                "correct": 2,
+                "skill": "Grammar"
+            },
+            {
+                "q": "Where____she ___daily?",
+                "a": "do- going",
+                "b": "does went",
+                "c": "does- go",
+                "d": "did- go",
+                "correct": 2,
+                "skill": "Spelling"
+            },
+            {
+                "q": "The baby is crying,______?",
+                "a": "isn't he",
+                "b": "isn't it",
+                "c": "doesn't he ",
+                "d": "isn't she",
+                "correct": 1,
+                "skill": "Grammar"
+            },
+            {
+                "q": "I enjoy____TV with my family.",
+                "a": "watching",
+                "b": "watch",
+                "c": "watches",
+                "d": "watchs",
+                "correct": 0,
+                "skill": "Grammar"
+            },
+            {
+                "q": "I think we_____visit Amman next month.",
+                "a": "are",
+                "b": "will",
+                "c": "going to",
+                "d": "were",
+                "correct": 1,
+                "skill": "Grammar"
+            },
+            {
+                "q": "____open the window, please.",
+                "a": "Didn't",
+                "b": "Doesn't",
+                "c": "Don't",
+                "d": "Can",
+                "correct": 2,
+                "skill": "Imperative"
+            },
+            {
+                "q": "Turaif is the ____ beautiful city in KSA.",
+                "a": "more",
+                "b": "much",
+                "c": "most",
+                "d": "nor",
+                "correct": 2,
+                "skill": "Superlative"
+            },
+            {
+                "q": "I_____ born in Bahrain.",
+                "a": "am",
+                "b": "was",
+                "c": "has",
+                "d": "had",
+                "correct": 1,
+                "skill": "Writing"
+            },
+            {
+                "q": "When my father came, we ____to music.",
+                "a": "were- listen",
+                "b": "were- listening",
+                "c": "were- listend",
+                "d": "were- listens",
+                "correct": 1,
+                "skill": "Grammar"
+            },
+            {
+                "q": "The bus____the station before we arrived.",
+                "a": "has left",
+                "b": "is lefting",
+                "c": "had left",
+                "d": "was lefting",
+                "correct": 2,
+                "skill": "Consequence"
+            },
+            {
+                "q": "the apple ____eaten yesterday by Noura.",
+                "a": "is",
+                "b": "was",
+                "c": "has",
+                "d": "gad",
+                "correct": 1,
+                "skill": "Grammar"
+            },
+            {
+                "q": "____your name at the top of the paper.",
+                "a": "Write",
+                "b": "Writing",
+                "c": "Writes",
+                "d": "Wrote",
+                "correct": 0,
+                "skill": "Capitalization"
+            },
+            {
+                "q": "Fruits are ____than sweets.",
+                "a": "good",
+                "b": "better",
+                "c": "best",
+                "d": "butter",
+                "correct": 1,
+                "skill": "Pluaral"
+            },
+            {
+                "q": "You should___up early.",
+                "a": "got",
+                "b": "going",
+                "c": "goes",
+                "d": "get",
+                "correct": 3,
+                "skill": "Grammar"
+            },
+            {
+                "q": "Reading stories____ interesting.",
+                "a": "has",
+                "b": "had",
+                "c": "are",
+                "d": "is",
+                "correct": 3,
+                "skill": "Reading"
+            }
+        ]
+    },
+    {
+        "name": "تحصيلي",
+        "questions": [
+            {
+                "q": "بنى العالم لينيوس تصنيفه للمخلوقات الحية على",
+                "a": "الصفات المشتركة والشكل الخارجي",
+                "b": "الحجم وتركيبها الداخلي",
+                "c": "الشكل الخارجي والسلوك",
+                "d": "وبيئتاتها الطبيعية",
+                "correct": 2,
+                "skill": "احياء"
+            },
+            {
+                "q": "images/questions/q4.png",
+                "a": "عظم سميك",
+                "b": "عظم اسفنجي",
+                "c": "تجويف النخاع",
+                "d": "غضروف",
+                "correct": 1,
+                "skill": "احياء"
+            },
+            {
+                "q": "حسب مقياس الحموضة pH يكون المحلول قاعديًا إذا كان:",
+                "a": "PH=0",
+                "b": "PH=7",
+                "c": "PH > 7",
+                "d": "PH <7",
+                "correct": 2,
+                "skill": "كيمياء"
+            },
+            {
+                "q": "الألكانات لا تذوب في الماء لأنها:",
+                "a": "قطبية تساهمية",
+                "b": "قطبية أيونية",
+                "c": "غير قطبية تساهمية",
+                "d": "غير قطبية أيونية",
+                "correct": 2,
+                "skill": "كيمياء"
+            },
+            {
+                "q": "images/questions/q5.png",
+                "a": "A",
+                "b": "B",
+                "c": "C",
+                "d": "D",
+                "correct": 2,
+                "skill": "فيزياء"
+            },
+            {
+                "q": "ينطبق مبدأ برنولي في حالة المائع:",
+                "a": "الساكن",
+                "b": "المتدفق بانتظام",
+                "c": "المتدفق دون انتظام",
+                "d": "المضطرب",
+                "correct": 1,
+                "skill": "فيزياء"
+            },
+            {
+                "q": "images/questions/q6.png",
+                "a": -1,
+                "b": 3,
+                "c": 1,
+                "d": "",
+                "correct": 3,
+                "skill": "رياضيات"
+            },
+            {
+                "q": "images/questions/q7.png",
+                "a": "images/questions/a1.png",
+                "b": "images/questions/b1.png",
+                "c": "images/questions/c1.png",
+                "d": "images/questions/d1.png",
+                "correct": 1,
+                "skill": "رياضيات"
+            }
+        ]
     }
 ]

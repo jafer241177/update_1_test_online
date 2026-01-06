@@ -441,14 +441,23 @@ function goToNextSection() {
     const sessionData = JSON.parse(sessionStorage.getItem("currentSession"));
     const currentMaterial = sessionData.material;
 
-    if (currentMaterial === "كمي") {
-        sessionData.material = "لفظي";
-    } 
-    else if (currentMaterial === "لفظي") {
-        sessionData.material = "كمي";
+    // ⭐ قائمة المواد بالترتيب الذي تريده
+    const materials = ["كمي", "لفظي", "STEP", "تحصيلي"]; 
+
+    let index = materials.indexOf(currentMaterial);
+    index++;
+
+    if (index >= materials.length) {
+        // ⭐ انتهت كل الأقسام
+        // يمكنك هنا تحويل الطالب لصفحة النهاية
+        window.location.href = "final.html"; 
+        return;
     }
+
+    sessionData.material = materials[index];
 
     sessionStorage.setItem("material", sessionData.material);
     sessionStorage.setItem("currentSession", JSON.stringify(sessionData));
     window.location.href = "student.html";
 }
+
