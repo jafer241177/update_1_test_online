@@ -452,7 +452,7 @@ function goToNextSection() {
     if (index >= materials.length) {
         // ⭐ انتهت كل الأقسام
         // يمكنك هنا تحويل الطالب لصفحة النهاية
-        window.location.href = "final.html"; 
+        window.location.href = "index.html"; 
         return;
     }
 
@@ -462,5 +462,6 @@ function goToNextSection() {
     sessionStorage.setItem("currentSession", JSON.stringify(sessionData));
     window.location.href = "student.html";
 }
+
 
 
