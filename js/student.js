@@ -443,19 +443,24 @@ function goToNextSection() {
     const sessionData = JSON.parse(sessionStorage.getItem("currentSession"));
     const currentMaterial = sessionData.material;
 
-    // ⭐ قائمة المواد بالترتيب الذي تريده
     const materials = ["كمي", "لفظي", "STEP", "تحصيلي"]; 
 
     let index = materials.indexOf(currentMaterial);
-    index++;
 
-    if (index >= materials.length) {
-        // ⭐ انتهت كل الأقسام
-        // يمكنك هنا تحويل الطالب لصفحة النهاية
-        window.location.href = "index.html"; 
+    // ⭐ إذا كان الطالب في آخر قسم (تحصيلي)
+    if (index === materials.length - 1) {
+        // هنا تختار ماذا تريد:
+        // 1) الذهاب للصفحة النهائية
+        window.location.href = "index.html";
         return;
+
+        // أو 2) العودة للصفحة الرئيسية
+        // window.location.href = "index.html";
+        // return;
     }
 
+    // ⭐ غير ذلك → انتقل للقسم التالي
+    index++;
     sessionData.material = materials[index];
 
     sessionStorage.setItem("material", sessionData.material);
