@@ -549,7 +549,7 @@
                 "skill": "فيزياء"
             },
             {
-                "q": "<p><img src=\"https://res.cloudinary.com/dwn1datpp/image/upload/v1768337269/gbnclxnfjriuilohgprt.png\"><img src=\"https://res.cloudinary.com/dwn1datpp/image/upload/v1768337267/bdmcjrkxkgjizrepk5ah.png\"></p>",
+                "q": "<p><img src=\"https://res.cloudinary.com/dwn1datpp/image/upload/v1768337269/gbnclxnfjriuilohgprt.png\"></p>",
                 "a": "<p>1</p>",
                 "b": "<p>2</p>",
                 "c": "<p>3</p>",
@@ -558,11 +558,11 @@
                 "skill": "احياء"
             },
             {
-                "q": "<p class=\"ql-align-center\"><img src=\"https://res.cloudinary.com/dwn1datpp/image/upload/v1768337471/vumzcbgvpudhnozvd35o.png\"><img src=\"https://res.cloudinary.com/dwn1datpp/image/upload/v1768337471/sorjvqleywkr23yof5wq.png\"></p>",
+                "q": "<p class=\"ql-align-center\"><img src=\"https://res.cloudinary.com/dwn1datpp/image/upload/v1768337471/sorjvqleywkr23yof5wq.png\"></p>",
                 "a": "<p>1</p>",
                 "b": "<p>2</p>",
                 "c": "<p>3</p>",
-                "d": "<p>4</p>",
+                "d": "<p><img src=\"https://res.cloudinary.com/dwn1datpp/image/upload/v1768339681/qgu8pe5mzc2yg5sxcwan.png\"></p>",
                 "correct": 2,
                 "skill": "احياء"
             }
