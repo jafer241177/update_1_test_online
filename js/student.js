@@ -135,12 +135,15 @@ function createQuestionBoxes() {
 }
 
 function renderContent(value) {
-    // لو القيمة فاضية أو undefined أو null
     if (value === null || value === undefined) return "";
 
-    // حوّل القيمة إلى نص دائمًا
     let v = String(value).trim();
     if (v === "") return "";
+
+    // ⭐ إذا كانت القيمة HTML جاهز (من Quill)
+    if (v.startsWith("<")) {
+        return v;
+    }
 
     // إذا كانت القيمة رابط صورة
     if (
@@ -171,7 +174,6 @@ function renderContent(value) {
         return html;
     }
 
-    // نص أو رقم فقط
     return `<p>${v}</p>`;
 }
 
@@ -460,4 +462,5 @@ function goToNextSection() {
     sessionStorage.setItem("currentSession", JSON.stringify(sessionData));
     window.location.href = "student.html";
 }
+
 
