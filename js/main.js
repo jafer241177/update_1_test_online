@@ -43,18 +43,26 @@ document.getElementById("startBtn").addEventListener("click", () => {
     // -----------------------------
     // 🔥 المعلم
     // -----------------------------
-    if (studentId === TEACHER_ID) {
+   if (studentId === TEACHER_ID) {
 
-        const sessionData = {
-            id: TEACHER_ID,
-            name: "المعلم المسؤول"
-        };
-
-        sessionStorage.setItem("currentSession", JSON.stringify(sessionData));
-
-        window.location.href = "report.html";
+    // ⭐ إذا اختار مادة → لا يدخل
+    if (material && material !== "") {
+        alert("لا يجب اختيار مادة عند دخول المعلم");
         return;
     }
+
+    // ⭐ إذا لم يختر مادة → يدخل عادي
+    const sessionData = {
+        id: TEACHER_ID,
+        name: "المعلم المسؤول",
+        material: "all" // قيمة افتراضية للمعلم
+    };
+
+    sessionStorage.setItem("currentSession", JSON.stringify(sessionData));
+
+    window.location.href = "report.html";
+    return;
+}
 
 
     // -----------------------------
@@ -99,5 +107,6 @@ document.getElementById("startBtn").addEventListener("click", () => {
         // الانتقال لصفحة الاختبار
         window.location.href = "student.html";
     });
+
 
 });
